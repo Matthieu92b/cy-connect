@@ -1,5 +1,3 @@
-# cy-connect
-projet d'informatique préing 1 puissance 5
 #include <stdio.h>
 #include<stdbool.h>
 #include<stdlib.h>
