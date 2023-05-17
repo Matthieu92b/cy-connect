@@ -10,6 +10,8 @@
 
 
 
+
+
 // Définition des constantes pour la taille de la surface de jeu
 #define WIDTH_MIN 8
 #define WIDTH_MAX 10
@@ -167,39 +169,40 @@ int ColorOfGamer(int num_gamer,gamer tab[3]){
  void print_table(int table[HEIGHT_MAX][WIDTH_MAX],int a,int b, gamer tab[3]){
    int couleur;
    system("clear");
+   //system("echo \r\c");
     for(int i=0; i<b;i++){
      for(int j=0;j<a;j++){
-       printf("+---");
+       printf("\033[40;37m+----");
         }
-        printf("+\n");
+        printf("\033[40;37m+\n");
        for (int j = 0; j < a; j++) {
-            printf("|  ");
+            printf("\033[40;37m|  ");
        switch (table[i][j]) {
          case 0 :
                 printf("\033[40;37m");
-                printf(" ");
+                printf("  ");
                 break;
          case 1 :
                 printf("\033[40;37m");
-                printf("X");
+                printf("X ");
                 break;
          default :
                 couleur = ColorOfGamer(table[i][j]-2,tab);
                 printf("\033[40;%dm",couleur);
-                printf("X");
+                printf("X ");
                 break;
        }
      }
-      printf("|\n");
+      printf("\033[40;37m| %d\n",i+1);
     }
     
      for (int j = 0; j < a; j++) {
-        printf("+---");
+        printf("\033[40;37m+----");
     }
-    printf("+\n");
+    printf("\033[40;37m+\n");
 
     for (int j = 0; j < a; j++) {
-        printf("  %d ", j+1);
+        printf("\033[40;37m  %d  ", j+1);
     }
     printf("\n");
          
@@ -301,16 +304,40 @@ int ColorOfGamer(int num_gamer,gamer tab[3]){
 
 
     // gravité du tableau
-    void gravity_table(int table[HEIGHT_MAX][WIDTH_MAX], int a, int b, int area_rotated,int Ligne_pivot, int colonne_pivot,int sens, gamer tab[3]){
-          int num_col,num_ligne;
-          int num_col_rotated,num_ligne_rotated;
+    void gravity_table(int table[HEIGHT_MAX][WIDTH_MAX], int a, int b, gamer tab[3],int num_gamer){
+      int area_rotated, Ligne_pivot,  colonne_pivot, sens;
+      int num_col,num_ligne;
+      int num_col_rotated,num_ligne_rotated;
       int imaginary_table[HEIGHT_MAX][WIDTH_MAX];
-      int delta = area_rotated/2;
+      int delta;
 
-
-     // printf ("%d %d %d %d\n",area_rotated, delta,Ligne_pivot,colonne_pivot);
-     // printf ("%d %d %d %d\n",Ligne_pivot-delta,Ligne_pivot+delta,colonne_pivot -delta,colonne_pivot+delta);
       
+       // determination  et affichage de la taille a pivoter par l'orinateur
+       area_rotated=print_Size_area_rotaded(tab,num_gamer);
+      delta = area_rotated/2;
+
+      bool cellule_vide = true;
+      while(cellule_vide==true){
+       // determination de la case pivot et sens de rotation par le joueur
+       rotated_Pawn(area_rotated,a,b,&Ligne_pivot,&colonne_pivot,&sens);
+
+        printf("%d %d\n",Ligne_pivot-delta,Ligne_pivot+delta);
+        printf("%d %d\n",colonne_pivot-delta,colonne_pivot+delta);
+        for(num_ligne=Ligne_pivot-delta;num_ligne<Ligne_pivot+delta+1;num_ligne++){
+          for(num_col=colonne_pivot-delta;num_col<colonne_pivot+delta+1;num_col++){ 
+             if (table[num_ligne-1][num_col-1]!=0){
+                  printf("%d %d", num_ligne, num_col);
+                cellule_vide = false;
+              }
+          }
+      }
+        if (cellule_vide == true)
+        {
+          printf("Erreur tu dois choisir une zone de rotation contenat un pion ou un mur infranchissable\n");
+        }
+       }
+ 
+
        if (sens==1){
       num_ligne_rotated = 1;
       for(num_col=colonne_pivot-delta;num_col<colonne_pivot+delta+1;num_col++){ 
@@ -325,48 +352,40 @@ int ColorOfGamer(int num_gamer,gamer tab[3]){
       }
       else if (sens == 2){
         }
-      printf("table \n");
-        // Affichage de la zone à tourner dans la table    
-       for(num_ligne=Ligne_pivot-delta;num_ligne<Ligne_pivot+delta+1;num_ligne++){
-        for(num_col=colonne_pivot-delta;num_col<colonne_pivot+delta+1;num_col++){
-          printf("%d" ,table[num_ligne-1][num_col-1]);
-         }
-         printf("\n");
-        }
-      // Affichage de la zone tournée dans la table imaginaire
-      printf("table imaginaire \n");
-       for(num_ligne=0;num_ligne<area_rotated;num_ligne++){
-        for(num_col=0;num_col<area_rotated;num_col++){
-          printf("%d" ,imaginary_table[num_ligne][num_col]);
-         }
-         printf("\n");
-        }
-      // Réécriture de la zone tournée dns la tanle
+   
+      // Réécriture de la zone tournée dns la table
         num_col_rotated = 1;
       for(num_col=colonne_pivot-delta;num_col<colonne_pivot+delta+1;num_col++){ 
           num_ligne_rotated = 1;
         for(num_ligne=Ligne_pivot-delta;num_ligne<Ligne_pivot+delta+1;num_ligne++){
           table[num_ligne-1][num_col-1]=imaginary_table[num_ligne_rotated-1][num_col_rotated-1];
-          //printf("%d %d --> %d %d\n",num_ligne,num_col,num_ligne_rotated,num_col_rotated);
             num_ligne_rotated++;
           }
           num_col_rotated++;
         }
-
-         printf("table \n");
-        // Affichage de la zone à tounée dans la table    
-       for(num_ligne=Ligne_pivot-delta;num_ligne<Ligne_pivot+delta+1;num_ligne++){
-        for(num_col=colonne_pivot-delta;num_col<colonne_pivot+delta+1;num_col++){
-          printf("%d" ,table[num_ligne-1][num_col-1]);
-         }
-         printf("\n");
-        }
-      char toto[50];
-     // printf ("continuer ?");
-     // scanf("%s",toto);
-      
+   
         print_table(table,a,b,tab);
-      
+        usleep(100000);
+      // ensuite application de la gravité
+      int nb_modification=1;
+
+       while(nb_modification>0){
+        nb_modification = 0;
+        for(int ligne=b-2;ligne>0;ligne-- ){
+          for(int colonne=0;colonne<a-1;colonne++){
+            if(table[ligne+1][colonne]==0 && table[ligne][colonne] > 1){
+              table[ligne+1][colonne]=table[ligne][colonne];
+              table[ligne][colonne]=0;
+                nb_modification++;
+            }
+
+         }
+          print_table(table, a,b,tab);
+          usleep(100000);
+         
+
+        }
+       }
     }
 
 
@@ -455,8 +474,21 @@ int ColorOfGamer(int num_gamer,gamer tab[3]){
     }
 
 
-    bool exist_empty_box(){
+    bool exist_empty_box(table[HEIGHT_MAX][WIDTH_MAX],int a){
+      int nombre=0;
+      for(int i=0;i<a;i++){
+        if(table[0][i]!=0 ){
+          nombre++;
+         
+        }
+      }
+      if(nombre==a){
+       printf("le jeu est remplie. Fin de la partie");
+            return false;
+         }
+      else{
       return true;
+      }
     }
 
 
@@ -499,8 +531,9 @@ int main() {
   int Ligne_pivot;
   int colonne_pivot;
   int sens;
+  int nb_affichage_table;
 
-
+  nb_affichage_table =0;
 
   //initialisation des joueurs 
   nb_gamers=init_gamers(tab);
@@ -512,7 +545,7 @@ int main() {
   //detemination du 1er joueur 
   gamer=init_Firstgamer(nb_gamers);
   winner=false;
-  tab_box= exist_empty_box();
+  tab_box=true;
   pion = 0;
   printf("Si tu veux sauvegarder la partie une fois celle-ci commencée rentre 0 comme colonne ou tu veux placer ton pion \n");
   
@@ -522,18 +555,13 @@ int main() {
     
     if (pion != -1){
    
-       // determination  et affichage de la taille a pivoter par l'orinateur
-       area_rotated=print_Size_area_rotaded(tab,gamer);
-      
-       // determination de la case pivot et sens de rotation par le joueur
-        rotated_Pawn(area_rotated,width,height,&Ligne_pivot,&colonne_pivot,&sens);
-      
+     
        // gravité du tableau
-       gravity_table(table,width,height, area_rotated,Ligne_pivot,colonne_pivot,sens,tab);
+       gravity_table(table,width,height,tab,gamer);
       
        //determination d'un vainqueur 
        winner = gamer_winner(table,width,height,tab);
-       // tab_box= exist_empty_box();
+       tab_box= exist_empty_box(table,width);
        //detemination du joueur suivant 
        Nextgamer(&gamer,nb_gamers);
     }
