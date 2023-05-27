@@ -11,4 +11,5 @@ pour le reste tout est indiqué clairement dans le jeu
 
 
 
-bug dans le programme: si il n'y a pas de parie sauvegardé et que l'on appuie sur 1 pour essayer de reprendre une partie, il va y avoir une erreur de segmentation car il n'y a rien de sauvegardé
+bug dans le programme: -si il n'y a pas de parie sauvegardé et que l'on appuie sur 1 pour essayer de reprendre une partie, il va y avoir une erreur de segmentation car il n'y a rien de sauvegardé.
+-quand on sauvegarde si on appuis sur une lettre ou un autre caractère ça sauvegarde.
