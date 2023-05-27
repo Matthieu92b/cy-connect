@@ -10,16 +10,16 @@
 
 
 //fonction ou on intialise le tableau avec les case vide et aussi placer les murs infranchissables
-void init_table(int table[HEIGHT_MAX][WIDTH_MAX],int a,int b){
-  for(int i=0; i<b;i++){
-    for(int j=0;j<a;j++){
+void init_table(int table[HEIGHT_MAX][WIDTH_MAX],int width,int height){
+  for(int i=0; i<height;i++){
+    for(int j=0;j<width;j++){
       table[i][j]=0;
     }
   }
   table[0][0]=1;
-  table[0][a-1]=1;
-  table[b-1][0]=1;
-  table[b-1][a-1]=1;
+  table[0][width-1]=1;
+  table[height-1][0]=1;
+  table[height-1][width-1]=1;
 }
 
 // fonction qui detemine le 1er joueur qui va jouer. On a décider que c'etait l'ordinateur qui allait choisir au hasard le premier joueur qui joue 
@@ -40,14 +40,14 @@ int init_Firstgamer(int nb_gamers){
 
  
 //fonction pour appliquer la graviter quand on place un pion et ou utilise la foction print_table pour avoir une impression d'avoir un vrai pion qui tombe avec la gravité
-void  pawn_gravity(int table[HEIGHT_MAX][WIDTH_MAX],int a, int b,int pawn,int num_gamer,gamer tab[3]){
+void  pawn_gravity(int table[HEIGHT_MAX][WIDTH_MAX],int width, int height,int pawn,int num_gamer,gamer tab[3]){
   int p=-1;
-  while(p<b-1 && table[p+1][pawn]==0){
+  while(p<height-1 && table[p+1][pawn]==0){
     p++; 
     if (p!=-1){
         table[p][pawn]=num_gamer+2;
     }
-    print_table(table, a,b,tab);
+    print_table(table, width,height,tab);
     usleep(100000);
     if (p!=-1){
       table[p][pawn]=0;
@@ -56,7 +56,7 @@ void  pawn_gravity(int table[HEIGHT_MAX][WIDTH_MAX],int a, int b,int pawn,int nu
   if (p!=-1){
     table[p][pawn]=num_gamer+2;
   }
-  print_table(table, a,b,tab);
+  print_table(table, width,height,tab);
   usleep(100000);
 }
 
@@ -68,7 +68,7 @@ void  pawn_gravity(int table[HEIGHT_MAX][WIDTH_MAX],int a, int b,int pawn,int nu
 
 
 //fonction ou on regarde si la case pivot du joueur choisis est possible. Ensuite cette fonction va executer la rotation des pions ou des lurs infranchissable, enfin cette fonction applique la gravité apres la rotation des pions gravité.
-void gravity_table(int table[HEIGHT_MAX][WIDTH_MAX], int a, int b, gamer tab[3],int num_gamer){
+void gravity_table(int table[HEIGHT_MAX][WIDTH_MAX], int width, int height, gamer tab[3],int num_gamer){
   int area_rotated, row_pivot,  column_pivot, sens;
   int num_col,num_row;
   int num_col_rotated,num_row_rotated;
@@ -80,7 +80,7 @@ void gravity_table(int table[HEIGHT_MAX][WIDTH_MAX], int a, int b, gamer tab[3],
   bool empty_cell = true;
   while(empty_cell==true){
   // determination de la case pivot et sens de rotation par le joueur
-    rotated_Pawn(area_rotated,a,b,&row_pivot,&column_pivot,&sens);
+    rotated_Pawn(area_rotated,width,height,&row_pivot,&column_pivot,&sens);
     for(num_row=row_pivot-delta;num_row<row_pivot+delta+1;num_row++){
       for(num_col=column_pivot-delta;num_col<column_pivot+delta+1;num_col++){ 
         if (table[num_row-1][num_col-1]!=0){
@@ -125,14 +125,14 @@ void gravity_table(int table[HEIGHT_MAX][WIDTH_MAX], int a, int b, gamer tab[3],
       }
       num_col_rotated++;
     }
-    print_table(table,a,b,tab);
+    print_table(table,width,height,tab);
     usleep(100000);
     // ensuite application de la gravité
     int nb_modification=1;
     while(nb_modification>0){
       nb_modification = 0;
-      for(int ligne=b-2;ligne>0;ligne-- ){
-        for(int colonne=0;colonne<=a-1;colonne++){
+      for(int ligne=height-2;ligne>0;ligne-- ){
+        for(int colonne=0;colonne<=width-1;colonne++){
           if(table[ligne+1][colonne]==0 && table[ligne][colonne] > 1){
             table[ligne+1][colonne]=table[ligne][colonne];
             table[ligne][colonne]=0;
@@ -140,7 +140,7 @@ void gravity_table(int table[HEIGHT_MAX][WIDTH_MAX], int a, int b, gamer tab[3],
           }
         }
       }
-      print_table(table, a,b,tab);
+      print_table(table, width,height,tab);
       usleep(100000);
     }
 }
@@ -148,19 +148,16 @@ void gravity_table(int table[HEIGHT_MAX][WIDTH_MAX], int a, int b, gamer tab[3],
 
 
 //fonction pour savoir si il y a un gagnant donc qu'il y a 5 piece aligné soit verticalement soit horizontalement ou bien en diagonales
-int gamer_winner(int table[HEIGHT_MAX][WIDTH_MAX],int a, int b,gamer tab[3]){
+int gamer_winner(int table[HEIGHT_MAX][WIDTH_MAX],int width, int height,gamer tab[3], int nb_gamers){
 int nb_winner;
 int winner;
 int imaginary_table[5][5];
 
-	for(int t=0;t<3;t++){
-	  	printf("%s\n",tab[t]);
-     tab[t].winner == false;
-     }
+	
 
   //ici on crée un table_imaginaire qui va parcourir tout le tableau pour determiner si il y a un gagnant
-  for(int i=0;i<b-4;i++){
-   for(int j=0;j<a-4;j++){
+  for(int i=0;i<height-4;i++){
+   for(int j=0;j<width-4;j++){
      for(int k=0;k<5;k++){
        for(int l=0;l<5;l++){
          imaginary_table[k][l]=table[k+i][l+j];
@@ -175,7 +172,7 @@ int imaginary_table[5][5];
               imaginary_table[k][0] < 5 && imaginary_table[k][0]>1){
                 winner= imaginary_table[k][0] - 2;
                 tab[winner].winner = true;
-                printf("wsh");  
+                
         }
       }
       for(int l=0;l<5;l++){
@@ -187,7 +184,7 @@ int imaginary_table[5][5];
               imaginary_table[0][l] < 5 && imaginary_table[0][l]>1){
                 winner= imaginary_table[0][l] - 2;
                 tab[winner].winner = true;
-                printf("wsh");
+              
         }
       }
        //avec la table imaginaire ici on determine tout les possibilité qu'il y a un gagnant avec les pieces alignée à la diagonales
@@ -198,7 +195,7 @@ int imaginary_table[5][5];
               imaginary_table[0][0] < 5 && imaginary_table[0][0]>1){
                 winner= imaginary_table[0][0] - 2;
                 tab[winner].winner = true;
-                  printf("wsh");
+                  
       }
       //avec la table imaginaire ici on determine tout les possibilité qu'il y a un gagnant avec les pieces alignée à la diagonales
       if(imaginary_table[0][4]==imaginary_table[1][3] &&
@@ -208,21 +205,20 @@ int imaginary_table[5][5];
               imaginary_table[0][4] < 5 && imaginary_table[0][4]>1){
                 winner= imaginary_table[0][4] - 2;
                 tab[winner].winner = true;
-                  printf("wsh");
+                
       }
           
     }
   }
  
   nb_winner = 0;
-  for(int t=0;t<3;t++){
-	  	printf("%s\n",tab[t]);
+  for(int t=0;t<nb_gamers;t++){
     if (tab[t].winner == true) {
      nb_winner++;
     }
   }
   if (nb_winner == 1){
-    for(int t=0;t<3;t++){
+    for(int t=0;t<nb_gamers;t++){
       if (tab[t].winner == true) {
         printf("le gagnant est : %s\n", tab[t].nom);
       }
@@ -230,7 +226,7 @@ int imaginary_table[5][5];
   }
   else if(nb_winner > 1){
     printf("les gagnants sont : " );
-    for(int t=0;t<3;t++){
+    for(int t=0;t<nb_gamers;t++){
       if (tab[t].winner == true) {
         printf("%s", tab[t].nom);
       }
@@ -243,10 +239,6 @@ int imaginary_table[5][5];
     else return false;
     
   }
-
-
-   
-
 // procedure pour determiner le joueur suivant avec des pointeurs car on ne peut pas retourner tout sinon
 void Nextgamer(int *gamer,int nb_gamers ){
   if (nb_gamers==2){
@@ -270,4 +262,5 @@ void Nextgamer(int *gamer,int nb_gamers ){
   }
   
 }
+  
   
