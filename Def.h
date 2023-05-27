@@ -34,7 +34,7 @@ int pawn_placement(int a, int b, int table[HEIGHT_MAX][WIDTH_MAX],int num_gamer,
 void gravity_table(int table[HEIGHT_MAX][WIDTH_MAX], int a, int b, gamer tab[3],int num_gamer);
      
      
-int gamer_winner(int table[HEIGHT_MAX][WIDTH_MAX],int a, int b,gamer tab[3],int nb_gamers);
+bool gamer_winner(int table[HEIGHT_MAX][WIDTH_MAX],int a, int b,gamer tab[3],int nb_gamers);
 
 
 bool exist_empty_box(int table[HEIGHT_MAX][WIDTH_MAX],int a);
