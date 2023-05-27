@@ -42,6 +42,14 @@ int init_Firstgamer(int nb_gamers){
 //fonction pour appliquer la graviter quand on place un pion et ou utilise la foction print_table pour avoir une impression d'avoir un vrai pion qui tombe avec la gravité
 void  pawn_gravity(int table[HEIGHT_MAX][WIDTH_MAX],int width, int height,int pawn,int num_gamer,gamer tab[3]){
   int p=-1;
+  if(table[p+1][pawn]==1){
+    printf("erreur il y a un mur infranchissable, choisissez une autre colonne\n \n");
+    pawn_placement(width, height, table, num_gamer,  tab);
+  }
+  if(table[p+1][pawn]==2 ||table[p+1][pawn]==3 || table[p+1][pawn]==4){
+    printf("toute la colonne est deja remplie, choisissez une autre colonne\n \n");
+    pawn_placement(width, height, table, num_gamer,  tab);
+  }
   while(p<height-1 && table[p+1][pawn]==0){
     p++; 
     if (p!=-1){
