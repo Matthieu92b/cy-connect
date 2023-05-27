@@ -17,7 +17,7 @@ void pawn_gravity(int table[HEIGHT_MAX][WIDTH_MAX],int a, int b,int pawn,int num
 
 void gravity_table(int table[HEIGHT_MAX][WIDTH_MAX], int a, int b, gamer tab[3],int num_gamer);
      
-int gamer_winner(int table[HEIGHT_MAX][WIDTH_MAX],int a, int b,gamer tab[3], int nb_gamers);
+bool gamer_winner(int table[HEIGHT_MAX][WIDTH_MAX],int a, int b,gamer tab[3], int nb_gamers);
 
 void Nextgamer(int *gamer,int nb_gamers );
     
