@@ -157,7 +157,7 @@ int pawn_placement(int width, int height, int table[HEIGHT_MAX][WIDTH_MAX],int n
   int pawn;
   char str_pawn[50];
   printf("%s choisis la colonne ou tu veux mettre ton pion : ",tab[num_gamer].nom);
-  pawn = Inform_value(1, width);
+  pawn = Inform_value(0, width);
   if (pawn > 0){
   //gravité d'un pion
     pawn_gravity(table, width, height,pawn-1,num_gamer,tab );
