@@ -22,10 +22,10 @@ int main() {
   int sens;
   int part ;
   printf("Bonjour\n");
-  printf("Voulez-vous commencer une nouvelle partie (0) ou reprendre la "
-         "dernière partie commencée (1) : ");
-  part = Inform_value(0, 1);
-  if (part == 0) {
+  printf("Voulez-vous commencer une nouvelle partie (1) ou reprendre la "
+         "dernière partie commencée (2) : ");
+  part = Inform_value(1, 2);
+  if (part == 1) {
     // initialisation des joueurs
     nb_gamers = init_gamers(tab);
     // determination de la dimension du tableau
