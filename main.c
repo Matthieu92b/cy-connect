@@ -20,7 +20,7 @@ int main() {
   int row_pivot;
   int column_pivot;
   int sens;
-  int part = 0;
+  int part ;
   printf("Bonjour\n");
   printf("Voulez-vous commencer une nouvelle partie (0) ou reprendre la "
          "dernière partie commencée (1) : ");
@@ -62,13 +62,11 @@ int main() {
       gravity_table(table, width, height, tab, gamer);
 
       // determination d'un vainqueur
-      winner = gamer_winner(table, width, height, tab);
-       printf("avant tab box\n");
+      winner = gamer_winner(table, width, height, tab, nb_gamers);
       tab_box = exist_empty_box(table, width);
-       printf("après tab box\n");
       // detemination du joueur suivant
       Nextgamer(&gamer, nb_gamers);
-       printf("après nextgamer\n");
+       
     
     } 
     else {
@@ -79,4 +77,3 @@ int main() {
     }
   }
 }
-
