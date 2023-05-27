@@ -156,7 +156,7 @@ void gravity_table(int table[HEIGHT_MAX][WIDTH_MAX], int width, int height, game
 
 
 //fonction pour savoir si il y a un gagnant donc qu'il y a 5 piece aligné soit verticalement soit horizontalement ou bien en diagonales
-int gamer_winner(int table[HEIGHT_MAX][WIDTH_MAX],int width, int height,gamer tab[3], int nb_gamers){
+bool gamer_winner(int table[HEIGHT_MAX][WIDTH_MAX],int width, int height,gamer tab[3], int nb_gamers){
 int nb_winner;
 int winner;
 int imaginary_table[5][5];
