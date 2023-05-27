@@ -15,11 +15,11 @@
 int Inform_value(int valmin, int valmax){
   char str_nbre[50];
   int nbre;
-  scanf("%s",&str_nbre);
+  scanf("%s",str_nbre);
   nbre = atoi(str_nbre);
   while(nbre< valmin || nbre> valmax){
-    printf("Erreur,la valeur doit être comprise entre %d et %d : ",valmin,valmax);
-    scanf("%s",&str_nbre);
+  printf("Erreur,la valeur doit être comprise entre %d et %d : ",valmin,valmax);
+    scanf("%s",str_nbre);
     nbre = atoi(str_nbre);
   }
   return nbre;
@@ -83,11 +83,11 @@ int init_gamers(gamer tab[3] ){
 }
 
 //procédure pour initialiser le tableau pour choisir la largeur et la hauteur de la surface du jeu
-void  init_Sizetable(int *a, int *b){
+void  init_Sizetable(int *width, int *height){
     printf("Entrez la largeur de la surface de jeu (entre %d et %d): ", WIDTH_MIN, WIDTH_MAX);
-    *a = Inform_value(WIDTH_MIN, WIDTH_MAX);
+    *width = Inform_value(WIDTH_MIN, WIDTH_MAX);
     printf("Entrez la hauteur de la surface de jeu (entre %d et %d): ", HEIGHT_MIN, HEIGHT_MAX);
-    *b= Inform_value(HEIGHT_MIN, HEIGHT_MAX);
+    *height= Inform_value(HEIGHT_MIN, HEIGHT_MAX);
 }
 
 
@@ -112,15 +112,15 @@ int ColorOfGamer(int num_gamer,gamer tab[3]){
   
  
 //fonction pour afficher le tableau et mettre le jeu sur un fond noir avec les murs infranchissable en blanc
-void print_table(int table[HEIGHT_MAX][WIDTH_MAX],int a,int b, gamer tab[3]){
+void print_table(int table[HEIGHT_MAX][WIDTH_MAX],int width,int height, gamer tab[3]){
    int couleur;
    system("clear");
-   for(int i=0; i<b;i++){ 
-    for(int j=0;j<a;j++){
+   for(int i=0; i<height;i++){ 
+    for(int j=0;j<width;j++){
       printf("\033[40;37m+----");
     }
     printf("\033[40;37m+\n");
-    for (int j = 0; j < a; j++) {
+    for (int j = 0; j < width; j++) {
       printf("\033[40;37m|  ");
       switch (table[i][j]) {
         case 0 :
@@ -140,11 +140,11 @@ void print_table(int table[HEIGHT_MAX][WIDTH_MAX],int a,int b, gamer tab[3]){
     }
     printf("\033[40;37m| %d\n",i+1);
    }
-   for (int j = 0; j < a; j++) {
+   for (int j = 0; j < width; j++) {
       printf("\033[40;37m+----");
    }
    printf("\033[40;37m+\n");
-   for (int j = 0; j < a; j++) {
+   for (int j = 0; j < width; j++) {
       printf("\033[40;37m  %d  ", j+1);
    }
    printf("\n");
@@ -153,14 +153,14 @@ void print_table(int table[HEIGHT_MAX][WIDTH_MAX],int a,int b, gamer tab[3]){
    
 
  //fonction pour la determination du placement d'un pion par le joueur qui ensuite appele la fonction pawn_gravity pour appliquer la graviter 
-int pawn_placement(int a, int b, int table[HEIGHT_MAX][WIDTH_MAX],int num_gamer,gamer tab[3]){
+int pawn_placement(int width, int height, int table[HEIGHT_MAX][WIDTH_MAX],int num_gamer,gamer tab[3]){
   int pawn;
   char str_pawn[50];
   printf("%s choisis la colonne ou tu veux mettre ton pion : ",tab[num_gamer].nom);
-  pawn = Inform_value(0, a);
+  pawn = Inform_value(0, width);
   if (pawn > 0){
   //gravité d'un pion
-    pawn_gravity(table, a, b,pawn-1,num_gamer,tab );
+    pawn_gravity(table, width, height,pawn-1,num_gamer,tab );
   }
   return pawn-1;
 } 
@@ -169,23 +169,23 @@ int pawn_placement(int a, int b, int table[HEIGHT_MAX][WIDTH_MAX],int num_gamer,
 
 //foction qui permet la determination de la zone et l'affichage de la largeur a pivoter que l'ordinateur chois aleatoirement entre 3 cases ou 5 cases
 int print_Size_area_rotaded(gamer tab[3],int num_gamer){
-  int width_pivoter;
+  int width_swing;
   printf("l'ordinateur va choisir la largeur de la zone a pivoter\n");
   srand(time(NULL));
-  width_pivoter=rand()%(5-3+1)+3;
-  while (width_pivoter==4){
-    width_pivoter=rand()%(5-3+1)+3;
+  width_swing=rand()%(5-3+1)+3;
+  while (width_swing==4){
+    width_swing=rand()%(5-3+1)+3;
   }
-  printf("l'ordinateur a choisis. %s votre largeur de zone a pivoter est de %d cases\n", tab[num_gamer].nom,width_pivoter);
-  return width_pivoter;
+  printf("l'ordinateur a choisis. %s votre largeur de zone a pivoter est de %d cases\n", tab[num_gamer].nom,width_swing);
+  return width_swing;
 }
 
 //determination de la case pivot et sens de rotation 
-void rotated_Pawn(int area_rotated, int a, int b,int *row_pivot, int *column_pivot, int *sens){
+void rotated_Pawn(int area_rotated, int width, int height,int *row_pivot, int *column_pivot, int *sens){
   //ce sont les valeurs minimum ou maximale que l'on peut choisir pour la case pivot 
   int xmin= area_rotated/2+1;//exemple si l'ordinateur dit que la zone a pivoter est de 3 cases ici cela fait qu'on obtient xmin=2 puisque c'est un int donc la ligne minimum ou on pourra placer sera 2, on ne pourrait donc pas choisir la ligne 1
-  int xmax=b-(area_rotated/2);//pour la colonne mac c'est la meme sauf que cela depend aussi de la hauteur
-  int ymax=a-(area_rotated/2);
+  int xmax=height-(area_rotated/2);//pour la colonne mac c'est la meme sauf que cela depend aussi de la hauteur
+  int ymax=width-(area_rotated/2);
   int ymin=area_rotated/2+1;
   printf("choisis la ligne de la case pivot, comprise entre %d et %d ",xmin,xmax);
   *row_pivot=Inform_value(xmin,xmax);
@@ -197,14 +197,14 @@ void rotated_Pawn(int area_rotated, int a, int b,int *row_pivot, int *column_piv
 
 
 //fonction avec un boléen qui indique la fin de la partie sans vainqueur si tout le tableau est remplie ou qu'il est impossble de jouer. Return false si le jeu est remplie 
-bool exist_empty_box(int table[HEIGHT_MAX][WIDTH_MAX],int a){
+bool exist_empty_box(int table[HEIGHT_MAX][WIDTH_MAX],int width){
   int nombre=0;
-  for(int i=0;i<a;i++){
+  for(int i=0;i<width;i++){
     if(table[0][i]!=0 ){
        nombre++;
     }
   }
-  if(nombre==a){
+  if(nombre==width){
     printf("le jeu est remplie. Fin de la partie");
     return false;
   }
@@ -212,7 +212,6 @@ bool exist_empty_box(int table[HEIGHT_MAX][WIDTH_MAX],int a){
     return true;
   }
 }
-
 
 
 
